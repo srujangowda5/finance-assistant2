@@ -1,0 +1,27 @@
+# Web framework
+fastapi
+uvicorn
+pydantic
+
+# LLM + RAG
+openai
+langchain
+faiss-cpu
+tqdm
+
+# Voice agent
+whisper
+gtts
+soundfile
+
+# Web scraping / API
+requests
+beautifulsoup4
+lxml
+yfinance
+
+# Frontend
+streamlit
+
+# Utils
+python-dotenv
