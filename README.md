@@ -1,4 +1,10 @@
+# 💹 Multi-Agent Finance Assistant
 
+🔗 [🌐 Live App on Streamlit](https://multi-agent-finance-assistant-srujangowda5.streamlit.app/)
+
+This project is a modular, voice-enabled financial assistant that delivers daily Asia tech market briefings using AI agents.
+
+---
 # 🧠 Multi-Agent Finance Assistant
 
 An open-source, voice-enabled market assistant that delivers real-time financial summaries using multiple AI agents, web scraping, and vector search.
@@ -64,46 +70,23 @@ finance-assistant2/
 ├── Dockerfile
 └── README.md
 ```
+## 🚀 Deployment
+
+This Streamlit app is live at:  
+🔗 [https://multi-agent-finance-assistant-srujangowda5.streamlit.app/](https://multi-agent-finance-assistant-srujangowda5.streamlit.app/)
+
+To run locally:
+
+```bash
+git clone https://github.com/srujangowda5/finance-assistant2
+cd finance-assistant2
+pip install -r requirements.txt
+streamlit run streamlit_app/main.py
+```
+
+Ensure individual FastAPI agents are running locally if not using mocked responses.
 
 ---
-
-## 🚀 Getting Started
-
-1. Clone the repo  
-   ```bash
-   git clone https://github.com/your-username/finance-assistant2
-   cd finance-assistant2
-   ```
-
-2. Create virtual environment  
-   ```bash
-   python -m venv venv
-   .\venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-3. Run each agent in separate terminals  
-   ```bash
-   uvicorn agents.api_agent.main:app --port 8001
-   uvicorn agents.analytics_agent.main:app --port 8002
-   uvicorn agents.language_agent.main:app --port 8003
-   uvicorn agents.scraping_agent.main:app --port 8005
-   uvicorn agents.retriever_agent.main:app --port 8006
-   uvicorn agents.voice_agent.main:app --port 8007
-   uvicorn agents.top_stocks_agent.main:app --port 8008
-   uvicorn orchestrator.main:app --port 8004
-   ```
-
-4. Launch Streamlit app  
-   ```bash
-   streamlit run streamlit_app/main.py
-   ```
-
----
-
-## 🛠️ Deployment
-
-This app can be deployed to **Streamlit Cloud** or run locally with Docker. Ensure `.env` is excluded and API keys are secured.
 
 ---
 
