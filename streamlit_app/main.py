@@ -21,7 +21,7 @@ st.subheader("🧠 Morning Market Summary")
 if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
         try:
-            res = requests.get("https://orchestrator-8bib.onrender.com/market-summary")
+            res = requests.post("https://orchestrator-8bib.onrender.com/market-summary")
             summary = res.json().get("summary", "No summary available.")
             st.success("Summary Generated ✅")
 
