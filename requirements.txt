@@ -25,3 +25,5 @@ streamlit
 
 # Utils
 python-dotenv
+
+langchain-openai
