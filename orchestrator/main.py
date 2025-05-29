@@ -21,15 +21,15 @@ def generate_market_summary():
         try:
             exposure_resp = requests.get(API_AGENT_URL)
             exposure_data = exposure_resp.json()
-        except Exception:
-            return {"error": "Failed to get data from API Agent"}
+        except Exception as e:
+            return {"error": f"Failed to get data from API Agent: {str(e)}"}
 
         # Step 2: Get trend analysis
         try:
             analytics_resp = requests.get(ANALYTICS_AGENT_URL)
             analytics_data = analytics_resp.json()
-        except Exception:
-            return {"error": "Failed to get data from Analytics Agent"}
+        except Exception as e:
+            return {"error": f"Failed to get data from Analytics Agent: {str(e)}"}
 
         # Step 3: Get earnings surprises
         try:
@@ -47,9 +47,10 @@ def generate_market_summary():
         except Exception:
             retrieved_chunks = "No RAG context available"
 
+        # Combine highlights
         highlights = earnings_highlights + "\n" + retrieved_chunks
 
-        # Step 5: Language Agent
+        # Step 5: Language Agent payload
         payload = {
             "change": analytics_data.get("change", 0),
             "trend": analytics_data.get("trend", "no change"),
@@ -59,10 +60,18 @@ def generate_market_summary():
 
         try:
             language_resp = requests.post(LANGUAGE_AGENT_URL, json=payload)
+
+            if language_resp.status_code != 200:
+                return {
+                    "error": f"Language agent failed: {language_resp.status_code}",
+                    "details": language_resp.text
+                }
+
             final_narrative = language_resp.json()
             return {"summary": final_narrative.get("narrative", "Summary generation failed")}
-        except Exception:
-            return {"error": "Failed to get summary from Language Agent"}
+
+        except Exception as e:
+            return {"error": f"Failed to get summary from Language Agent: {str(e)}"}
 
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": f"Unexpected Orchestrator error: {str(e)}"}
