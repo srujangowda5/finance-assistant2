@@ -60,7 +60,7 @@ def generate_market_summary():
 
         try:
             language_resp = requests.post(LANGUAGE_AGENT_URL, json=payload)
-
+            print("LangResp", language_resp.status_code, language_resp.text)
             if language_resp.status_code != 200:
                 return {
                     "error": f"Language agent failed: {language_resp.status_code}",
