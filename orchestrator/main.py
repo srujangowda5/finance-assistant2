@@ -4,9 +4,9 @@ import requests
 app = FastAPI()
 
 # Agent URLs
-API_AGENT_URL = "http://localhost:8001/exposure"
-ANALYTICS_AGENT_URL = "http://localhost:8002/analyze"
-LANGUAGE_AGENT_URL = "http://localhost:8003/narrative"
+API_AGENT_URL = "https://api-agent-l7np.onrender.com/exposure"
+ANALYTICS_AGENT_URL = "https://analytics-agent-47fk.onrender.com/analyze"
+LANGUAGE_AGENT_URL = "https://language-agent.onrender.com/narrative"
 
 @app.get("/")
 def root():
@@ -24,12 +24,12 @@ def generate_market_summary():
         analytics_data = analytics_resp.json()
 
         # Step 3: Get earnings surprises
-        scraping_resp = requests.get("http://localhost:8005/earnings")
+        scraping_resp = requests.get("https://scraping-agent-vvrf.onrender.com/earnings")
         earnings_data = scraping_resp.json()
         earnings_highlights = "\n".join(earnings_data.get("surprises", []))
 
         # Step 4: Query Retriever Agent
-        retriever_resp = requests.get("http://localhost:8006/search?q=Asia tech earnings")
+        retriever_resp = requests.get("https://retriever-agent-f2m2.onrender.com/search?q=Asia tech earnings")
         retriever_data = retriever_resp.json()
         retrieved_chunks = "\n".join(retriever_data.get("matches", []))
 
