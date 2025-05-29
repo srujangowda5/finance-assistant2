@@ -10,7 +10,7 @@ import os
 app = FastAPI()
 
 # Load Whisper model (base model)
-model = whisper.load_model("base")
+model = load_model("base")
 
 @app.get("/")
 def root():
