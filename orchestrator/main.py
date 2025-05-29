@@ -7,6 +7,9 @@ app = FastAPI()
 API_AGENT_URL = "https://api-agent-l7np.onrender.com/exposure"
 ANALYTICS_AGENT_URL = "https://analytics-agent-47fk.onrender.com/analyze"
 LANGUAGE_AGENT_URL = "https://language-agent.onrender.com/narrative"
+RETRIEVER_AGENT_URL = "https://retriever-agent-f2m2.onrender.com/search"
+SCRAPING_AGENT_URL = "https://scraping-agent-vvrf.onrender.com/earnings"
+
 
 @app.get("/")
 def root():
