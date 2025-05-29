@@ -69,10 +69,11 @@ def generate_market_summary():
                     "details": language_resp.text
                 }
 
-            final_narrative = language_resp.json()
-            return {"summary": final_narrative.get("narrative", "Summary generation failed")}
-        except Exception as e:
-            return {"error": f"Failed to get summary from Language Agent: {str(e)}"}
+            narrative_text = final_narrative.get("narrative")
+            if not narrative_text or narrative_text.strip() == "":
+                print("🌐 Final narrative object:", final_narrative)
+                return {"summary": "Summary generation failed — no response from Language Agent."}
+            return {"summary": narrative_text}
 
     except Exception as e:
         return {"error": f"Unexpected Orchestrator error: {str(e)}"}
