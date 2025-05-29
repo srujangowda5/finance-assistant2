@@ -64,6 +64,28 @@ if st.button("📊 Get Asia Tech Data"):
     else:
         st.error("Failed to fetch Asia tech data.")
 
+# 🚀 Top 5 Gainers Today
+st.markdown("---")
+st.subheader("🚀 Top 5 Gainers Today")
+
+if st.button("🔥 Show Top Stocks"):
+    with st.spinner("Fetching top stock data..."):
+        try:
+            res = requests.get("https://top-stocks-agent.onrender.com/top-stocks")
+            if res.status_code == 200:
+                top_stocks = res.json().get("top_5_stocks", [])
+                if not top_stocks:
+                    st.warning("No stock data received.")
+                else:
+                    for stock in top_stocks:
+                        st.markdown(f"- **{stock['symbol']}**: {stock['yesterday']} → {stock['today']} ({stock['change_pct']}%)")
+                    st.success("Top stock data retrieved ✅")
+            else:
+                st.error("Failed to fetch top stocks.")
+        except Exception as e:
+            st.error(f"Error fetching top stocks: {e}")
+
+
 # 🔍 Custom Stock Tracker
 st.markdown("---")
 st.subheader("🔍 Custom Stock Tracker")
