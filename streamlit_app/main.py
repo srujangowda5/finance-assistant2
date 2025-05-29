@@ -21,7 +21,7 @@ st.subheader("🧠 Morning Market Summary")
 if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
         try:
-            res = requests.get("http://localhost:8004/market-summary")
+            res = requests.get("https://orchestrator-8bib.onrender.com/market-summary")
             summary = res.json().get("summary", "No summary available.")
             st.success("Summary Generated ✅")
 
@@ -37,7 +37,7 @@ if st.button("📊 Get Market Summary"):
             st.markdown("🔊 **Voice Summary:**")
 
             voice_res = requests.post(
-                "http://localhost:8007/speak-text",
+                "https://voice-agent-k0rf.onrender.com/speak-text",
                 data={"summary": summary}
             )
 
@@ -55,7 +55,7 @@ st.markdown("---")
 st.subheader("🌏 Asia Tech Snapshot")
 
 if st.button("📊 Get Asia Tech Data"):
-    res = requests.get("http://localhost:8001/exposure")
+    res = requests.get("https://api-agent-l7np.onrender.com/exposure")
     if res.status_code == 200:
         data = res.json()
         st.markdown(f"**Total Allocation:** {data['asia_tech_allocation']}")
