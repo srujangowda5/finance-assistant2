@@ -50,7 +50,7 @@ def generate_market_summary():
         # Combine highlights
         highlights = earnings_highlights + "\n" + retrieved_chunks
 
-        # Step 5: Language Agent payload
+        # Step 5: Language Agent
         payload = {
             "change": analytics_data.get("change", 0),
             "trend": analytics_data.get("trend", "no change"),
@@ -58,30 +58,21 @@ def generate_market_summary():
             "highlights": highlights
         }
 
-        # Step 5: Language Agent
-payload = {
-    "change": analytics_data.get("change", 0),
-    "trend": analytics_data.get("trend", "no change"),
-    "sentiment": "neutral",
-    "highlights": highlights
-}
+        try:
+            language_resp = requests.post(LANGUAGE_AGENT_URL, json=payload)
+            print("📤 Sent to Language Agent:", payload)
+            print("📥 Received from Language Agent:", language_resp.status_code, language_resp.text)
 
-try:
-    language_resp = requests.post(LANGUAGE_AGENT_URL, json=payload)
-    print("📤 Sent to Language Agent:", payload)
-    print("📥 Received from Language Agent:", language_resp.status_code, language_resp.text)
+            if language_resp.status_code != 200:
+                return {
+                    "error": f"Language agent failed: {language_resp.status_code}",
+                    "details": language_resp.text
+                }
 
-    if language_resp.status_code != 200:
-        return {
-            "error": f"Language agent failed: {language_resp.status_code}",
-            "details": language_resp.text
-        }
-
-    final_narrative = language_resp.json()
-    return {"summary": final_narrative.get("narrative", "Summary generation failed")}
-except Exception as e:
-    return {"error": f"Failed to get summary from Language Agent: {str(e)}"}
-
+            final_narrative = language_resp.json()
+            return {"summary": final_narrative.get("narrative", "Summary generation failed")}
+        except Exception as e:
+            return {"error": f"Failed to get summary from Language Agent: {str(e)}"}
 
     except Exception as e:
         return {"error": f"Unexpected Orchestrator error: {str(e)}"}
