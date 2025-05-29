@@ -27,12 +27,12 @@ def generate_market_summary():
         analytics_data = analytics_resp.json()
 
         # Step 3: Get earnings surprises
-        scraping_resp = requests.get("https://scraping-agent-vvrf.onrender.com/earnings")
+        scraping_resp = requests.get(SCRAPING_AGENT_URL)
         earnings_data = scraping_resp.json()
         earnings_highlights = "\n".join(earnings_data.get("surprises", []))
 
         # Step 4: Query Retriever Agent
-        retriever_resp = requests.get("https://retriever-agent-f2m2.onrender.com/search?q=Asia tech earnings")
+        retriever_resp = requests.get(RETRIEVER_AGENT_URL)
         retriever_data = retriever_resp.json()
         retrieved_chunks = "\n".join(retriever_data.get("matches", []))
 
