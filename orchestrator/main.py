@@ -14,7 +14,7 @@ SCRAPING_AGENT_URL = "https://scraping-agent-vvrf.onrender.com/earnings"
 def root():
     return {"message": "Orchestrator Agent is live. Use /market-summary"}
 
-@app.get("/market-summary")
+@app.get("/market-summary",methods=["GET", "POST"])
 def generate_market_summary():
     try:
         # Step 1: Get exposure data
