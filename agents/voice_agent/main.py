@@ -10,7 +10,10 @@ import os
 app = FastAPI()
 
 # Load Whisper model (base model)
-model = whisper.load_model("base")
+#model = whisper.load_model("base")
+@app.post("/speak")
+async def voice_to_summary(file: UploadFile = File(...)):
+    return {"error": "Voice-based input is disabled on Render to save memory. Please use /speak-text instead."}
 
 @app.get("/")
 def root():
