@@ -41,7 +41,7 @@ async def voice_to_summary(file: UploadFile = File(...)):
     transcript = result["text"]
 
     # Send transcript to orchestrator (as a mock question)
-    response = requests.get("http://localhost:8004/market-summary")
+    response = requests.get("https://orchestrator-8bib.onrender.com/market-summary")
     summary = response.json().get("summary", "Sorry, I couldn't generate a summary.")
 
     # Convert summary to audio
