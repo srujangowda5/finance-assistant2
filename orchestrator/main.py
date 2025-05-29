@@ -14,37 +14,47 @@ SCRAPING_AGENT_URL = "https://scraping-agent-vvrf.onrender.com/earnings"
 def root():
     return {"message": "Orchestrator Agent is live. Use /market-summary"}
 
-@app.api_route("/market-summary",methods=["GET", "POST"])
+@app.get("/market-summary")
 def generate_market_summary():
     try:
         # Step 1: Get exposure data
         try:
+            print("📡 Calling API Agent:", API_AGENT_URL)
             exposure_resp = requests.get(API_AGENT_URL)
+            print("✅ API Agent response:", exposure_resp.status_code, exposure_resp.text)
             exposure_data = exposure_resp.json()
         except Exception as e:
             return {"error": f"Failed to get data from API Agent: {str(e)}"}
 
         # Step 2: Get trend analysis
         try:
+            print("📡 Calling Analytics Agent:", ANALYTICS_AGENT_URL)
             analytics_resp = requests.get(ANALYTICS_AGENT_URL)
+            print("✅ Analytics Agent response:", analytics_resp.status_code, analytics_resp.text)
             analytics_data = analytics_resp.json()
         except Exception as e:
             return {"error": f"Failed to get data from Analytics Agent: {str(e)}"}
 
         # Step 3: Get earnings surprises
         try:
+            print("📡 Calling Scraping Agent:", SCRAPING_AGENT_URL)
             scraping_resp = requests.get(SCRAPING_AGENT_URL)
+            print("✅ Scraping Agent response:", scraping_resp.status_code, scraping_resp.text)
             earnings_data = scraping_resp.json()
             earnings_highlights = "\n".join(earnings_data.get("surprises", []))
-        except Exception:
+        except Exception as e:
+            print("❌ Scraping Agent failed:", str(e))
             earnings_highlights = "Earnings data unavailable"
 
         # Step 4: Get RAG context
         try:
+            print("📡 Calling Retriever Agent:", RETRIEVER_AGENT_URL)
             retriever_resp = requests.get(RETRIEVER_AGENT_URL, params={"q": "Asia tech earnings"})
+            print("✅ Retriever Agent response:", retriever_resp.status_code, retriever_resp.text)
             retriever_data = retriever_resp.json()
             retrieved_chunks = "\n".join(retriever_data.get("matches", []))
-        except Exception:
+        except Exception as e:
+            print("❌ Retriever Agent failed:", str(e))
             retrieved_chunks = "No RAG context available"
 
         # Combine highlights
@@ -59,9 +69,10 @@ def generate_market_summary():
         }
 
         try:
+            print("📡 Sending to Language Agent:", LANGUAGE_AGENT_URL)
+            print("📤 Payload:", payload)
             language_resp = requests.post(LANGUAGE_AGENT_URL, json=payload)
-            print("📤 Sent to Language Agent:", payload)
-            print("📥 Received from Language Agent:", language_resp.status_code, language_resp.text)
+            print("✅ Language Agent response:", language_resp.status_code, language_resp.text)
 
             if language_resp.status_code != 200:
                 return {
@@ -69,11 +80,10 @@ def generate_market_summary():
                     "details": language_resp.text
                 }
 
-            narrative_text = final_narrative.get("narrative")
-            if not narrative_text or narrative_text.strip() == "":
-                print("🌐 Final narrative object:", final_narrative)
-                return {"summary": "Summary generation failed — no response from Language Agent."}
-            return {"summary": narrative_text}
+            final_narrative = language_resp.json()
+            return {"summary": final_narrative.get("narrative", "Summary generation failed")}
+        except Exception as e:
+            return {"error": f"Failed to get summary from Language Agent: {str(e)}"}
 
     except Exception as e:
         return {"error": f"Unexpected Orchestrator error: {str(e)}"}
