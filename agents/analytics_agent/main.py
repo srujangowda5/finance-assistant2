@@ -7,7 +7,7 @@ import requests
 
 app = FastAPI()
 
-API_AGENT_URL = "http://localhost:8001/exposure"
+API_AGENT_URL = "https://api-agent-l7np.onrender.com/exposure"
 
 class AnalyticsResult(BaseModel):
     change: int
