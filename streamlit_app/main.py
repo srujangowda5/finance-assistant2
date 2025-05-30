@@ -44,7 +44,7 @@ if st.button("📊 Get Market Summary"):
             st.subheader("🔊 Voice Summary")
             if summary.strip().lower() != "no summary available.":
                 voice_res = requests.post(
-                    "https://voice-agent-k0rf.onrender.com/speak-text",
+                    "finance-assistant2-voiceagent-production.up.railway.app/speak-text",
                     data={"summary": summary}
                 )
                 if voice_res.status_code == 200:
