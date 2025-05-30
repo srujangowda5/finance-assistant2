@@ -22,8 +22,7 @@ if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
         try:
             res = requests.post("https://finance-assistant2-orchestrator-production.up.railway.app/market-summary")
-            full_response = res.json()
-            summary = full_response.get("summary", "No summary available.")
+            summary = res.json().get("summary", "No summary available.")
             st.success("Summary Generated ✅")
 
             st.markdown(f"""
@@ -32,9 +31,26 @@ if st.button("📊 Get Market Summary"):
                 </div>
             """, unsafe_allow_html=True)
 
+            # 🔊 Voice Summary Section
+            st.markdown("---")
+            st.markdown("🔊 **Voice Summary:**")
+
+            if summary.strip().lower() != "no summary available.":
+                voice_res = requests.post(
+                    "https://voice-agent-k0rf.onrender.com/speak-text",
+                    data={"summary": summary}
+                )
+
+                if voice_res.status_code == 200:
+                    audio_bytes = io.BytesIO(voice_res.content)
+                    st.audio(audio_bytes, format="audio/mp3")
+                else:
+                    st.warning("Voice generation failed.")
+            else:
+                st.warning("No voice generated — summary was empty.")
+
         except Exception as e:
             st.error(f"Something went wrong: {e}")
-
 
 # 🌏 Asia Tech Snapshot
 st.markdown("---")
@@ -70,7 +86,6 @@ if st.button("🔥 Show Top Stocks"):
                 st.error("Failed to fetch top stocks.")
         except Exception as e:
             st.error(f"Error fetching top stocks: {e}")
-
 
 # 🔍 Custom Stock Tracker
 st.markdown("---")
