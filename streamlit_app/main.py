@@ -25,18 +25,25 @@ st.markdown("---")
 st.subheader("🧠 Morning Market Summary")
 
 if st.button("📊 Get Market Summary"):
+    st.toast("⚡ Waking up sleeping servers... please hold tight!", icon="⏳")
+
     with st.spinner("Generating market summary..."):
         try:
             res = requests.post("https://finance-assistant2-orchestrator-production.up.railway.app/market-summary")
-            summary = res.json().get("summary", "No summary available.")
-            st.success("Summary Generated ✅")
+            full_response = res.json()
+            summary = full_response.get("summary", "No summary available.")
+            st.success("✅ Summary Generated")
 
-            # Display Summary
             st.markdown(f"""
                 <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
                 <b>📝 Summary:</b><br>{summary}
                 </div>
             """, unsafe_allow_html=True)
+
+        except Exception as e:
+            st.error(f"⚠️ Something went wrong: {e}")
+            st.info("🧊 Servers might be cold-starting. Please retry in a few seconds.")
+
 
             # 🔊 Voice Summary (optional TTS)
             st.markdown("---")
