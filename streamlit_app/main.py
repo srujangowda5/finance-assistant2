@@ -21,7 +21,7 @@ st.subheader("🧠 Morning Market Summary")
 if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
         try:
-            res = requests.post("finance-assistant2-orchestrator-production.up.railway.app/market-summary")
+            res = requests.post("https://finance-assistant2-orchestrator-production.up.railway.app/market-summary")
             full_response = res.json()
             summary = full_response.get("summary", "No summary available.")
             st.success("Summary Generated ✅")
