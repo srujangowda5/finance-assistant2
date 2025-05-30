@@ -26,9 +26,6 @@ if st.button("📊 Get Market Summary"):
             summary = full_response.get("summary", "No summary available.")
             st.success("Summary Generated ✅")
 
-            # Debug response in UI
-            st.write("🛠️ Raw Orchestrator Response:", full_response)
-
             st.markdown(f"""
                 <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
                 <b>📝 Summary:</b><br>{summary}
