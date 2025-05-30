@@ -6,7 +6,7 @@ import io
 # 🌐 Page config
 st.set_page_config(page_title="Market Briefing Assistant", page_icon="📈", layout="centered")
 
-# ✅ Toast to notify about Whisper being disabled
+# 🚧 Initial Toast - Whisper info
 st.toast(
     "🚧 Voice Assistant using Whisper is disabled due to Render memory limits. Click '📊 Get Market Summary' to proceed.",
     icon="⚠️"
@@ -14,19 +14,18 @@ st.toast(
 
 # 🎯 Title
 st.markdown("""
-# 📈 AI Market Briefing Assistant
+# 📈 AI Market Briefing Assistant  
 Welcome, Portfolio Manager 👋  
 Get live Asia Tech insights — in text and audio.
 """)
 
 st.markdown("---")
 
-# 🧠 Market Summary Section
+# 🧠 Morning Market Summary
 st.subheader("🧠 Morning Market Summary")
 
 if st.button("📊 Get Market Summary"):
     st.toast("⚡ Waking up sleeping servers... please hold tight!", icon="⏳")
-
     with st.spinner("Generating market summary..."):
         try:
             res = requests.post("https://finance-assistant2-orchestrator-production.up.railway.app/market-summary")
@@ -40,15 +39,9 @@ if st.button("📊 Get Market Summary"):
                 </div>
             """, unsafe_allow_html=True)
 
-        except Exception as e:
-            st.error(f"⚠️ Something went wrong: {e}")
-            st.info("🧊 Servers might be cold-starting. Please retry in a few seconds.")
-
-
-            # 🔊 Voice Summary (optional TTS)
+            # 🔊 Voice Summary (TTS)
             st.markdown("---")
-            st.markdown("🔊 **Voice Summary:**")
-
+            st.subheader("🔊 Voice Summary")
             if summary.strip().lower() != "no summary available.":
                 voice_res = requests.post(
                     "https://voice-agent-k0rf.onrender.com/speak-text",
@@ -63,7 +56,8 @@ if st.button("📊 Get Market Summary"):
                 st.warning("No voice generated — summary was empty.")
 
         except Exception as e:
-            st.error(f"Something went wrong: {e}")
+            st.error(f"⚠️ Something went wrong: {e}")
+            st.info("🧊 Servers might be cold-starting. Please retry in a few seconds.")
 
 # 🌏 Asia Tech Snapshot
 st.markdown("---")
@@ -79,7 +73,7 @@ if st.button("📊 Get Asia Tech Data"):
     else:
         st.error("Failed to fetch Asia tech data.")
 
-# 🚀 Top 5 Gainers Today
+# 🚀 Top 5 Gainers
 st.markdown("---")
 st.subheader("🚀 Top 5 Gainers Today")
 
@@ -100,7 +94,7 @@ if st.button("🔥 Show Top Stocks"):
         except Exception as e:
             st.error(f"Error fetching top stocks: {e}")
 
-# 🔍 Custom Stock Tracker
+# 🔍 Custom Tracker
 st.markdown("---")
 st.subheader("🔍 Custom Stock Tracker")
 
