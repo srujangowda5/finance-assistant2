@@ -21,34 +21,23 @@ st.subheader("🧠 Morning Market Summary")
 if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
         try:
-            res = requests.get("https://orchestrator-8bib.onrender.com/market-summary")
-            summary = res.json().get("summary", "No summary available.")
+            res = requests.post("https://orchestrator-8bib.onrender.com/market-summary")
+            full_response = res.json()
+            summary = full_response.get("summary", "No summary available.")
             st.success("Summary Generated ✅")
 
-            # 🔹 Styled block for summary
+            # Debug response in UI
+            st.write("🛠️ Raw Orchestrator Response:", full_response)
+
             st.markdown(f"""
-    <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
-    <b>📝 Summary:</b><br>{summary}
-    </div>
-""", unsafe_allow_html=True)
-
-
-            st.markdown("---")
-            st.markdown("🔊 **Voice Summary:**")
-
-            voice_res = requests.post(
-                "https://voice-agent-k0rf.onrender.com/speak-text",
-                data={"summary": summary}
-            )
-
-            if voice_res.status_code == 200:
-                audio_bytes = io.BytesIO(voice_res.content)
-                st.audio(audio_bytes, format="audio/mp3")
-            else:
-                st.warning("Voice generation failed.")
+                <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
+                <b>📝 Summary:</b><br>{summary}
+                </div>
+            """, unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Something went wrong: {e}")
+
 
 # 🌏 Asia Tech Snapshot
 st.markdown("---")
