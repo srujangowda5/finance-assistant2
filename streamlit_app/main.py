@@ -6,9 +6,16 @@ import io
 # 🌐 Page config
 st.set_page_config(page_title="Market Briefing Assistant", page_icon="📈", layout="centered")
 
+# 🚧 Whisper Warning Banner
+st.warning(
+    "**🚧 Voice Assistant Temporarily Disabled:**\n\n"
+    "The Whisper speech-to-text feature is currently disabled due to memory limits on Render's free plan.\n\n"
+    "👉 For now, please use the **'Get Market Summary'** button below to view the summary in text."
+)
+
 # 🎯 Title
 st.markdown("""
-# 📈 AI Market Briefing Assistant 
+# 📈 AI Market Briefing Assistant
 Welcome, Portfolio Manager 👋  
 Get live Asia Tech insights — in text and audio.
 """)
@@ -17,10 +24,6 @@ st.markdown("---")
 
 # 🧠 Market Summary Section
 st.subheader("🧠 Morning Market Summary")
-# 🚫 Whisper Notice
-st.warning("""
-🚧 **Voice Assistant Disabled**  
-The voice summary feature using Whisper is currently **disabled** due to memory limits on Render's free plan.
 
 if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
@@ -29,13 +32,14 @@ if st.button("📊 Get Market Summary"):
             summary = res.json().get("summary", "No summary available.")
             st.success("Summary Generated ✅")
 
+            # Display Summary
             st.markdown(f"""
                 <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
                 <b>📝 Summary:</b><br>{summary}
                 </div>
             """, unsafe_allow_html=True)
 
-            # 🔊 Voice Summary Section
+            # 🔊 Voice Summary (Optional – only if you want it enabled)
             st.markdown("---")
             st.markdown("🔊 **Voice Summary:**")
 
@@ -44,7 +48,6 @@ if st.button("📊 Get Market Summary"):
                     "https://voice-agent-k0rf.onrender.com/speak-text",
                     data={"summary": summary}
                 )
-
                 if voice_res.status_code == 200:
                     audio_bytes = io.BytesIO(voice_res.content)
                     st.audio(audio_bytes, format="audio/mp3")
