@@ -17,6 +17,10 @@ st.markdown("---")
 
 # 🧠 Market Summary Section
 st.subheader("🧠 Morning Market Summary")
+# 🚫 Whisper Notice
+st.warning("""
+🚧 **Voice Assistant Disabled**  
+The voice summary feature using Whisper is currently **disabled** due to memory limits on Render's free plan.
 
 if st.button("📊 Get Market Summary"):
     with st.spinner("Generating market summary..."):
