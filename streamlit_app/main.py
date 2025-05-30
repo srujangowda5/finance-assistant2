@@ -31,47 +31,52 @@ if st.button("📊 Get Market Summary"):
             res = requests.post("https://finance-assistant2-orchestrator-production.up.railway.app/market-summary")
             full_response = res.json()
             summary = full_response.get("summary", "No summary available.")
-            st.success("✅ Summary Generated")
-
-            st.markdown(f"""
-                <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
-                <b>📝 Summary:</b><br>{summary}
-                </div>
-            """, unsafe_allow_html=True)
-
-            # 🔊 Voice Summary (TTS)
-            st.markdown("---")
-            st.subheader("🔊 Voice Summary")
-            if summary.strip().lower() != "no summary available.":
-                voice_res = requests.post(
-                    "finance-assistant2-voiceagent-production.up.railway.app/speak-text",
-                    data={"summary": summary}
-                )
-                if voice_res.status_code == 200:
-                    audio_bytes = io.BytesIO(voice_res.content)
-                    st.audio(audio_bytes, format="audio/mp3")
-                else:
-                    st.warning("Voice generation failed.")
+            
+            if summary == "No summary available.":
+                st.warning("🧊 Servers might be cold-starting. Please click again in a few seconds.")
             else:
-                st.warning("No voice generated — summary was empty.")
+                st.success("✅ Summary Generated")
+                st.markdown(f"""
+                    <div style='background-color:#ecf0f1;padding:15px;border-radius:10px;margin-top:10px;font-size:16px; color:#111827'>
+                    <b>📝 Summary:</b><br>{summary}
+                    </div>
+                """, unsafe_allow_html=True)
 
+                # 🔊 Voice Summary (TTS)
+                st.markdown("---")
+                st.subheader("🔊 Voice Summary")
+                try:
+                    voice_res = requests.post(
+                        "https://finance-assistant2-voiceagent-production.up.railway.app/speak-text",
+                        data={"summary": summary}
+                    )
+                    if voice_res.status_code == 200:
+                        audio_bytes = io.BytesIO(voice_res.content)
+                        st.audio(audio_bytes, format="audio/mp3")
+                    else:
+                        st.warning("Voice generation failed.")
+                except Exception as e:
+                    st.warning(f"Voice summary error: {e}")
         except Exception as e:
             st.error(f"⚠️ Something went wrong: {e}")
-            st.info("🧊 Servers might be cold-starting. Please retry in a few seconds.")
+            st.info("🧊 Some agents may still be waking up. Please retry in 10–15 seconds.")
 
 # 🌏 Asia Tech Snapshot
 st.markdown("---")
 st.subheader("🌏 Asia Tech Snapshot")
 
 if st.button("📊 Get Asia Tech Data"):
-    res = requests.get("https://api-agent-l7np.onrender.com/exposure")
-    if res.status_code == 200:
-        data = res.json()
-        st.markdown(f"**Total Allocation:** {data['asia_tech_allocation']}")
-        st.markdown(f"**Yesterday:** {data['yesterday']}")
-        st.markdown(f"**Change %:** {data['change_percent']}%")
-    else:
-        st.error("Failed to fetch Asia tech data.")
+    try:
+        res = requests.get("https://api-agent-l7np.onrender.com/exposure")
+        if res.status_code == 200:
+            data = res.json()
+            st.markdown(f"**Total Allocation:** {data['asia_tech_allocation']}")
+            st.markdown(f"**Yesterday:** {data['yesterday']}")
+            st.markdown(f"**Change %:** {data['change_percent']}%")
+        else:
+            st.error("Failed to fetch Asia tech data.")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 # 🚀 Top 5 Gainers
 st.markdown("---")
@@ -124,7 +129,6 @@ if st.button("📥 Get Stock Data"):
                     for sym, yest, today, change in data:
                         st.markdown(f"- **{sym}**: {yest} → {today} ({change}%)")
                     st.success("Custom stock data retrieved ✅")
-
         except Exception as e:
             st.error(f"Error: {e}")
 
