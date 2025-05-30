@@ -6,7 +6,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Load and verify API key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    print("❌ OPENAI_API_KEY not found in environment")
+else:
+    print("✅ OPENAI_API_KEY loaded")
+
+client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 app = FastAPI()
 
@@ -15,7 +22,6 @@ class NarrativeRequest(BaseModel):
     trend: str
     sentiment: str = "neutral"
     highlights: str = ""
-
 
 @app.get("/")
 def root():
@@ -37,6 +43,7 @@ Rules:
 - Do not skip any company.
 - Output should be one sentence only.
 """
+    print("📝 Prompt to OpenAI:\n", prompt)
 
     try:
         response = client.chat.completions.create(
@@ -48,6 +55,9 @@ Rules:
             temperature=0.3
         )
         summary = response.choices[0].message.content.strip()
+        print("✅ OpenAI Response:", summary)
         return {"narrative": summary}
+
     except Exception as e:
+        print("❌ OpenAI API error:", str(e))
         return {"error": str(e)}
