@@ -47,7 +47,7 @@ if st.button("📊 Get Market Summary"):
                 st.subheader("🔊 Voice Summary")
                 try:
                     voice_res = requests.post(
-                        "https://finance-assistant2-voiceagent-production.up.railway.app/speak",
+                        "https://finance-assistant2-voiceagent-production.up.railway.app/speak-text",
                         data={"summary": summary}
                     )
                     if voice_res.status_code == 200:
