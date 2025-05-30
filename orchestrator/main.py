@@ -4,11 +4,11 @@ import requests
 app = FastAPI()
 
 # Agent URLs
-API_AGENT_URL = "https://api-agent-l7np.onrender.com/exposure"
-ANALYTICS_AGENT_URL = "https://analytics-agent-47fk.onrender.com/analyze"
-LANGUAGE_AGENT_URL = "https://language-agent.onrender.com/narrative"
-RETRIEVER_AGENT_URL = "https://retriever-agent-f2m2.onrender.com/search"
-SCRAPING_AGENT_URL = "https://scraping-agent-vvrf.onrender.com/earnings"
+#API_AGENT_URL = "https://api-agent-l7np.onrender.com/exposure"
+#ANALYTICS_AGENT_URL = "https://analytics-agent-47fk.onrender.com/analyze"
+#LANGUAGE_AGENT_URL = "https://language-agent.onrender.com/narrative"
+#RETRIEVER_AGENT_URL = "https://retriever-agent-f2m2.onrender.com/search"
+#SCRAPING_AGENT_URL = "https://scraping-agent-vvrf.onrender.com/earnings"
 
 @app.get("/")
 def root():
@@ -19,8 +19,8 @@ def generate_market_summary():
     try:
         # Step 1: Get exposure data
         try:
-            print("📡 Calling API Agent:", API_AGENT_URL)
-            exposure_resp = requests.get(API_AGENT_URL)
+            print("📡 Calling API Agent:",https://api-agent-l7np.onrender.com/exposure)
+            exposure_resp = requests.get(https://api-agent-l7np.onrender.com/exposure)
             print("✅ API Agent response:", exposure_resp.status_code, exposure_resp.text)
             exposure_data = exposure_resp.json()
         except Exception as e:
@@ -28,8 +28,8 @@ def generate_market_summary():
 
         # Step 2: Get trend analysis
         try:
-            print("📡 Calling Analytics Agent:", ANALYTICS_AGENT_URL)
-            analytics_resp = requests.get(ANALYTICS_AGENT_URL)
+            print("📡 Calling Analytics Agent:",https://analytics-agent-47fk.onrender.com/analyze)
+            analytics_resp = requests.get(https://analytics-agent-47fk.onrender.com/analyze)
             print("✅ Analytics Agent response:", analytics_resp.status_code, analytics_resp.text)
             analytics_data = analytics_resp.json()
         except Exception as e:
@@ -37,8 +37,8 @@ def generate_market_summary():
 
         # Step 3: Get earnings surprises
         try:
-            print("📡 Calling Scraping Agent:", SCRAPING_AGENT_URL)
-            scraping_resp = requests.get(SCRAPING_AGENT_URL)
+            print("📡 Calling Scraping Agent:",https://scraping-agent-vvrf.onrender.com/earnings)
+            scraping_resp = requests.get(https://scraping-agent-vvrf.onrender.com/earnings)
             print("✅ Scraping Agent response:", scraping_resp.status_code, scraping_resp.text)
             earnings_data = scraping_resp.json()
             earnings_highlights = "\n".join(earnings_data.get("surprises", []))
@@ -48,8 +48,8 @@ def generate_market_summary():
 
         # Step 4: Get RAG context
         try:
-            print("📡 Calling Retriever Agent:", RETRIEVER_AGENT_URL)
-            retriever_resp = requests.get(RETRIEVER_AGENT_URL, params={"q": "Asia tech earnings"})
+            print("📡 Calling Retriever Agent:",https://retriever-agent-f2m2.onrender.com/search?q=Asia tech earnings)
+            retriever_resp = requests.get(https://retriever-agent-f2m2.onrender.com/search?q=Asia tech earnings)
             print("✅ Retriever Agent response:", retriever_resp.status_code, retriever_resp.text)
             retriever_data = retriever_resp.json()
             retrieved_chunks = "\n".join(retriever_data.get("matches", []))
@@ -69,9 +69,9 @@ def generate_market_summary():
         }
 
         try:
-            print("📡 Sending to Language Agent:", LANGUAGE_AGENT_URL)
+            print("📡 Sending to Language Agent:",https://language-agent.onrender.com/narrative)
             print("📤 Payload:", payload)
-            language_resp = requests.post(LANGUAGE_AGENT_URL, json=payload)
+            language_resp = requests.post(https://language-agent.onrender.com/narrative, json=payload)
             print("✅ Language Agent response:", language_resp.status_code, language_resp.text)
 
             if language_resp.status_code != 200:
