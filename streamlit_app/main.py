@@ -8,7 +8,7 @@ st.set_page_config(page_title="Market Briefing Assistant", page_icon="📈", lay
 
 # 🎯 Title
 st.markdown("""
-# 📈 AI Market Briefing Assistant yoyoyoyoyo
+# 📈 AI Market Briefing Assistant 
 Welcome, Portfolio Manager 👋  
 Get live Asia Tech insights — in text and audio.
 """)
