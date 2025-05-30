@@ -6,11 +6,10 @@ import io
 # 🌐 Page config
 st.set_page_config(page_title="Market Briefing Assistant", page_icon="📈", layout="centered")
 
-# 🚧 Whisper Warning Banner
-st.warning(
-    "**🚧 Voice Assistant Temporarily Disabled:**\n\n"
-    "The Whisper speech-to-text feature is currently disabled due to memory limits on Render's free plan.\n\n"
-    "👉 For now, please use the **'Get Market Summary'** button below to view the summary in text."
+# ✅ Toast to notify about Whisper being disabled
+st.toast(
+    "🚧 Voice Assistant using Whisper is disabled due to Render memory limits. Click '📊 Get Market Summary' to proceed.",
+    icon="⚠️"
 )
 
 # 🎯 Title
@@ -39,7 +38,7 @@ if st.button("📊 Get Market Summary"):
                 </div>
             """, unsafe_allow_html=True)
 
-            # 🔊 Voice Summary (Optional – only if you want it enabled)
+            # 🔊 Voice Summary (optional TTS)
             st.markdown("---")
             st.markdown("🔊 **Voice Summary:**")
 
